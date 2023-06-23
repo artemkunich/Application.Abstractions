@@ -2,8 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>11</LangVersion>
+        <LangVersion>10</LangVersion>
         <RootNamespace>Akunich.Application.Abstractions</RootNamespace>
+        <AssemblyName>Akunich.Application.Abstractions</AssemblyName>
+        <PackageId>Akunich.Application.Abstractions</PackageId>
+        <Authors>Artem Kunich</Authors>
     </PropertyGroup>
 
 </Project>
