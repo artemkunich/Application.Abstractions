@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Akunich.Application.Abstractions;
 
-public class Result<TValue> : Result
+public sealed class Result<TValue> : Result
 {
     private readonly TValue _value;
 

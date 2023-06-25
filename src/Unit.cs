@@ -1,6 +1,6 @@
 namespace Akunich.Application.Abstractions;
 
-public class Unit
+public sealed class Unit
 {
     private static Unit _value;
 
