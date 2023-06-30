@@ -9,7 +9,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services, Assembly assembly) => services
         .AddRequestHandlers(assembly)
         .AddNotificationHandlers(assembly)
-        .AddPipelineBehaviors(assembly);
+        .AddPipelineBehaviors(assembly)
+        .AddPipelines(assembly);
 
     public static IServiceCollection AddRequestHandlers(this IServiceCollection services, Assembly assembly)
     {
@@ -61,14 +62,37 @@ public static class ServiceCollectionExtensions
         foreach (var behaviorType in behaviorTypes)
         {
             var genericBehaviorType = behaviorType
-                .GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
+                .GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipelineBehavior<,>));
             if(genericBehaviorType is null)
                 continue;
             
             if(behaviorType.IsGenericType)
-                services.AddScoped(typeof(IRequestHandler<,>), behaviorType.GetGenericTypeDefinition());
+                services.AddScoped(typeof(IPipelineBehavior<,>), behaviorType.GetGenericTypeDefinition());
             else
                 services.AddScoped(genericBehaviorType, behaviorType);
+        }
+        
+        return services;
+    }
+    
+    public static IServiceCollection AddPipelines(this IServiceCollection services, Assembly assembly)
+    {
+        var piplineTypes = assembly.GetTypes().Where(t =>
+            !t.IsAbstract && !t.IsInterface &&
+            t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipeline<,>))
+        ).ToList();
+
+        foreach (var pipelineType in piplineTypes)
+        {
+            var genericPipelineType = pipelineType
+                .GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipeline<,>));
+            if(genericPipelineType is null)
+                continue;
+            
+            if(pipelineType.IsGenericType)
+                services.AddScoped(typeof(IPipeline<,>), pipelineType.GetGenericTypeDefinition());
+            else
+                services.AddScoped(genericPipelineType, pipelineType);
         }
         
         return services;
