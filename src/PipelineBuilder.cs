@@ -18,7 +18,7 @@ public class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TRe
     }
     
     public IPipelineBuilder<TRequest, TResponse> AddBehavior(Func<TRequest, CancellationToken, 
-        ShortNextDelegate<TResponse>, Task<Result<TResponse>>> behavior)
+        NextDelegate<TResponse>, Task<Result<TResponse>>> behavior)
     {
         _behaviors.Add(behavior);
         return this;
@@ -38,7 +38,7 @@ public class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TRe
         return this;
     }
 
-    public Func<TRequest, CancellationToken, Task<Result<TResponse>>> Build()
+    public IPipeline<TRequest, TResponse> Build()
     {
         var behaviors = _behaviors.ToArray().Reverse();
         var next = _handler;
@@ -49,12 +49,12 @@ public class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TRe
 
             if (behavior is Func<TRequest, CancellationToken, NextDelegate<TRequest, TResponse>, Task<Result<TResponse>>> converter)
                 next = (request, cancellation) => converter(request, cancellation, (r,c) => nextNext(r,c));
-            else if (behavior is Func<TRequest, CancellationToken, ShortNextDelegate<TResponse>, Task<Result<TResponse>>> shortBehavior)
+            else if (behavior is Func<TRequest, CancellationToken, NextDelegate<TResponse>, Task<Result<TResponse>>> shortBehavior)
                 next = (request, cancellation) => shortBehavior(request, cancellation, () => nextNext(request, cancellation));
             else
                 throw new InvalidOperationException("Unexpected type of behavior");
         }
         
-        return next;
+        return new GenericPipeline<TRequest, TResponse>(next);
     }
 }

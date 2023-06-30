@@ -7,14 +7,14 @@ namespace Akunich.Application.Abstractions;
 public interface IPipelineBuilder<TRequest,TResponse> where TRequest : IRequest<TResponse>
 {
     IPipelineBuilder<TRequest, TResponse> AddBehavior(
-        Func<TRequest, CancellationToken, ShortNextDelegate<TResponse>, Task<Result<TResponse>>> behavior);
+        Func<TRequest, CancellationToken, NextDelegate<TResponse>, Task<Result<TResponse>>> behavior);
 
     IPipelineBuilder<TRequest, TResponse> AddBehavior(
         Func<TRequest, CancellationToken, 
             NextDelegate<TRequest, TResponse>, Task<Result<TResponse>>> behavior);
     IPipelineBuilder<TRequest, TResponse> SetHandler(Func<TRequest, CancellationToken, Task<Result<TResponse>>> handler);
 
-    Func<TRequest, CancellationToken, Task<Result<TResponse>>> Build();
+    IPipeline<TRequest, TResponse> Build();
 }
 
 public static class PipelineBuilderExtensions
