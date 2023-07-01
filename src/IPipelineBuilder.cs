@@ -25,13 +25,13 @@ public static class PipelineBuilderExtensions
         return builder;
     }
     
-    public static IPipelineBuilder<TRequest, TResponse> AddHandler<TRequest, TResponse>(this IPipelineBuilder<TRequest, TResponse> builder, IRequestHandler<TRequest, TResponse> handler) where TRequest : IRequest<TResponse>
+    public static IPipelineBuilder<TRequest, TResponse> SetHandler<TRequest, TResponse>(this IPipelineBuilder<TRequest, TResponse> builder, IRequestHandler<TRequest, TResponse> handler) where TRequest : IRequest<TResponse>
     {
         builder.SetHandler(handler.HandleAsync);
         return builder;
     }
     
-    public static IPipelineBuilder<TRequest, TResponse> AddPipeline<TRequest, TResponse>(this IPipelineBuilder<TRequest, TResponse> builder, IPipeline<TRequest, TResponse> pipeline) where TRequest : IRequest<TResponse>
+    public static IPipelineBuilder<TRequest, TResponse> SetHandler<TRequest, TResponse>(this IPipelineBuilder<TRequest, TResponse> builder, IPipeline<TRequest, TResponse> pipeline) where TRequest : IRequest<TResponse>
     {
         builder.SetHandler(pipeline.HandleAsync);
         return builder;

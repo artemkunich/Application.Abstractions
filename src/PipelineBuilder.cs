@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Akunich.Application.Abstractions.Internal;
 
 namespace Akunich.Application.Abstractions;
 
-public class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TResponse> where TRequest : IRequest<TResponse>
+public sealed class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TResponse> where TRequest : IRequest<TResponse>
 {
+    public static PipelineBuilder<TRequest, TResponse> Create() => new();
+    
     private readonly List<object> _behaviors;
     private Func<TRequest, CancellationToken, Task<Result<TResponse>>> _handler;
 
@@ -55,6 +58,6 @@ public class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequest,TRe
                 throw new InvalidOperationException("Unexpected type of behavior");
         }
         
-        return new GenericPipeline<TRequest, TResponse>(next);
+        return new Pipeline<TRequest, TResponse>(next);
     }
 }

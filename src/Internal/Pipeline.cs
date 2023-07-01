@@ -2,13 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions;
+namespace Akunich.Application.Abstractions.Internal;
 
-internal class GenericPipeline<TRequest, TResponse> : IPipeline<TRequest, TResponse>
+internal class Pipeline<TRequest, TResponse> : IPipeline<TRequest, TResponse>
 {
     private readonly Func<TRequest, CancellationToken, Task<Result<TResponse>>> _handle;
     
-    public GenericPipeline(Func<TRequest,CancellationToken,Task<Result<TResponse>>> handle)
+    public Pipeline(Func<TRequest,CancellationToken,Task<Result<TResponse>>> handle)
     {
         _handle = handle;
     }

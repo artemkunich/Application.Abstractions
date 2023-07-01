@@ -1,11 +1,18 @@
 using System.Linq;
 using System.Reflection;
+using Akunich.Application.Abstractions.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Akunich.Application.Abstractions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddRequestDispatcher(this IServiceCollection services) => services
+        .AddScoped<IRequestDispatcher, RequestDispatcher>();
+    
+    public static IServiceCollection AddNotificationDispatcher(this IServiceCollection services) => services
+        .AddScoped<INotificationDispatcher, NotificationDispatcher>();
+    
     public static IServiceCollection AddApplication(this IServiceCollection services, Assembly assembly) => services
         .AddRequestHandlers(assembly)
         .AddNotificationHandlers(assembly)
