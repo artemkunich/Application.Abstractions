@@ -13,6 +13,21 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddNotificationDispatcher(this IServiceCollection services) => services
         .AddScoped<INotificationDispatcher, NotificationDispatcher>();
     
+    public static IServiceCollection AddNotificationMediator<TNotification, TCommand>(this IServiceCollection services, 
+        MapNotificationDelegate<TNotification, TCommand> mapNotification) 
+        where TNotification : INotification
+        where TCommand : IRequest<Unit> => services
+        .AddScoped(_ => mapNotification)
+        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TCommand>>();
+    
+    public static IServiceCollection AddNotificationMediator<TNotification, TCommand, TPipeline>(this IServiceCollection services, 
+        MapNotificationDelegate<TNotification, TCommand> mapNotification) 
+        where TNotification : INotification
+        where TCommand : IRequest<Unit> 
+        where TPipeline : IPipeline<TCommand, Unit> => services
+        .AddScoped(_ => mapNotification)
+        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TCommand,TPipeline>>();
+    
     public static IServiceCollection AddApplication(this IServiceCollection services, Assembly assembly) => services
         .AddRequestHandlers(assembly)
         .AddNotificationHandlers(assembly)
@@ -72,11 +87,12 @@ public static class ServiceCollectionExtensions
                 .GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipelineBehavior<,>));
             if(genericBehaviorType is null)
                 continue;
-            
-            if(behaviorType.IsGenericType)
-                services.AddScoped(typeof(IPipelineBehavior<,>), behaviorType.GetGenericTypeDefinition());
-            else
-                services.AddScoped(genericBehaviorType, behaviorType);
+
+            var behaviorTypeToRegistration = behaviorType;
+            if (behaviorType.IsGenericType)
+                behaviorTypeToRegistration = behaviorType.GetGenericTypeDefinition();
+                
+            services.AddScoped(behaviorTypeToRegistration);
         }
         
         return services;
@@ -95,11 +111,12 @@ public static class ServiceCollectionExtensions
                 .GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipeline<,>));
             if(genericPipelineType is null)
                 continue;
-            
+
+            var pipelineTypeToRegistration = pipelineType;
             if(pipelineType.IsGenericType)
-                services.AddScoped(typeof(IPipeline<,>), pipelineType.GetGenericTypeDefinition());
-            else
-                services.AddScoped(genericPipelineType, pipelineType);
+                pipelineTypeToRegistration = pipelineType.GetGenericTypeDefinition();
+            
+            services.AddScoped(pipelineTypeToRegistration);
         }
         
         return services;

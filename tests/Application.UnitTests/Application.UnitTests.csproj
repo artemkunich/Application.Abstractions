@@ -4,10 +4,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Application.Abstractions.UnitTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Application.Abstractions.csproj" />
+      <ProjectReference Include="..\Application.TestPipeline\Application.TestPipeline.csproj" />
+      <ProjectReference Include="..\Application.TestPipelineWithNotification\Application.TestPipelineWithNotification.csproj" />
     </ItemGroup>
 
     <ItemGroup>
