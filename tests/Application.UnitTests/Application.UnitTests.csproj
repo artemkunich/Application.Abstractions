@@ -9,8 +9,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Application.Abstractions.csproj" />
-      <ProjectReference Include="..\Application.TestPipeline\Application.TestPipeline.csproj" />
-      <ProjectReference Include="..\Application.TestPipelineWithNotification\Application.TestPipelineWithNotification.csproj" />
+      <ProjectReference Include="..\Application.Space\Application.Space.csproj" />
+      <ProjectReference Include="..\Application.Underscore\Application.Underscore.csproj" />
     </ItemGroup>
 
     <ItemGroup>

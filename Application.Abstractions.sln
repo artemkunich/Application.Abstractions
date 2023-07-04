@@ -8,11 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{64B220BA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "tests\Application.UnitTests\Application.UnitTests.csproj", "{BC891A1E-3641-461E-884F-4438E87E2F1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.TestPipeline", "tests\Application.TestPipeline\Application.TestPipeline.csproj", "{F40096A6-D2EF-4E6D-B3F5-DB93B02E7509}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Space", "tests\Application.Space\Application.Space.csproj", "{F40096A6-D2EF-4E6D-B3F5-DB93B02E7509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.TestUtils", "tests\Application.TestUtils\Application.TestUtils.csproj", "{20F439E7-F665-4126-9796-2C5ABB2E2A93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Symbol", "tests\Application.Symbol\Application.Symbol.csproj", "{20F439E7-F665-4126-9796-2C5ABB2E2A93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.TestPipelineWithNotification", "tests\Application.TestPipelineWithNotification\Application.TestPipelineWithNotification.csproj", "{DE9BC23F-DE15-41B0-9FA6-0056D86D6A65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Underscore", "tests\Application.Underscore\Application.Underscore.csproj", "{DE9BC23F-DE15-41B0-9FA6-0056D86D6A65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

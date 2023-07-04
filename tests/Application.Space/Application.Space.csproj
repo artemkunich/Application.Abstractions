@@ -8,7 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Application.Abstractions.csproj" />
-      <ProjectReference Include="..\Application.TestUtils\Application.TestUtils.csproj" />
+      <ProjectReference Include="..\Application.Symbol\Application.Symbol.csproj" />
     </ItemGroup>
 
 </Project>

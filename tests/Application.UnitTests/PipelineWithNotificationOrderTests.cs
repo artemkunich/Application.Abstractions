@@ -1,6 +1,7 @@
-﻿using Akunich.Application.Abstractions;
-using Application.TestPipelineWithNotification;
-using Application.TestUtils;
+﻿using System.Text;
+using Akunich.Application.Abstractions;
+using Application.Space;
+using Application.Underscore;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -10,81 +11,65 @@ namespace Application.Abstractions.UnitTests;
 public class PipelineWithNotificationOrderTests
 {
     [Fact]
-    public async Task TestOrderOfBehaviorsAndHandler()
+    public async Task TestOrderOfBehaviorsWithHandler()
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection
-            .AddScoped<IList<int>, List<int>>()
-            .AddScoped(sp => new TestConfiguration(){BehaviorsCount = 3})
+            .AddScoped<StringBuilder>()
             .AddNotificationDispatcher()
-            .AddApplication(typeof(TestCommand).Assembly)
-            .AddNotificationMediator<TestNotification, TestCommandAfterNotification>(n => new TestCommandAfterNotification
+            .AddApplication(typeof(SpaceCommand).Assembly)
+            .AddApplication(typeof(UnderscoreCommand).Assembly)
+            .AddNotificationMediator<SpaceNotification, UnderscoreCommand>(n => new UnderscoreCommand(n.BehaviorsCount)
             {
-                ValueFromNotification = n.HandlerOrder
+                Value = n.Value
             });
         var services = serviceCollection.BuildServiceProvider();
         
-        var pipeline = services.GetRequiredService<TestCommandPipelineWithHandler>();
+        var pipeline = services.GetRequiredService<SpaceCommandPipeline13WithHandler>();
 
-        var testCommandValue = "Test value";
-        var testCommand = new TestCommand
+        var spaceCommandValue = "Space value";
+        var spaceCommand = new SpaceCommand(3)
         {
-            Value = testCommandValue
+            Value = spaceCommandValue,
+            RaiseNotification = true
         };
 
-        await pipeline.HandleAsync(testCommand, default);
+        await pipeline.HandleAsync(spaceCommand, default);
 
-        testCommand.Value.Should().Be(testCommandValue);
-        services.GetRequiredService<IList<int>>().ToArray().Should()
-            .BeEquivalentTo(new []{ 1, 2, 3, 4, 5, 6, 7 });
+        spaceCommand.Value.Should().Be(spaceCommandValue);
+        services.GetRequiredService<StringBuilder>().ToString().Should()
+            .BeEquivalentTo(" 1 2 3_4_5 6 7 ");
     }
  
     [Fact]
-    public async Task TestOrderOfBehaviorsAndPipeline()
+    public async Task TestOrderOfBehaviorsWithPipeline()
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection
-            .AddScoped<IList<int>, List<int>>()
-            .AddScoped(sp => new TestConfiguration(){BehaviorsCount = 6})
+            .AddScoped<StringBuilder>()
             .AddNotificationDispatcher()
-            .AddApplication(typeof(TestCommand).Assembly)
-            .AddNotificationMediator<TestNotification, TestCommandAfterNotification, TestCommandAfterNotificationPipeline>(n => new TestCommandAfterNotification
-            {
-                ValueFromNotification = n.HandlerOrder
-            });
+            .AddApplication(typeof(SpaceCommand).Assembly)
+            .AddApplication(typeof(UnderscoreCommand).Assembly)
+            .AddNotificationMediator<SpaceNotification, UnderscoreCommand, UnderscoreCommandPipeline46>(n => 
+                new UnderscoreCommand(n.BehaviorsCount)
+                {
+                    Value = n.Value
+                });
         var services = serviceCollection.BuildServiceProvider();
         
-        var pipeline = services.GetRequiredService<TestCommandPipelineWithHandler>();
+        var pipeline = services.GetRequiredService<SpaceCommandPipeline13WithHandler>();
 
-        var testCommandValue = "Test value";
-        var testCommand = new TestCommand
+        var spaceCommandValue = "Space value";
+        var spaceCommand = new SpaceCommand(6)
         {
-            Value = testCommandValue
+            Value = spaceCommandValue,
+            RaiseNotification = true
         };
 
-        await pipeline.HandleAsync(testCommand, default);
+        await pipeline.HandleAsync(spaceCommand, default);
 
-        testCommand.Value.Should().Be(testCommandValue);
-        services.GetRequiredService<IList<int>>().ToArray().Should()
-            .BeEquivalentTo(new []{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 });
+        spaceCommand.Value.Should().Be(spaceCommandValue);
+        services.GetRequiredService<StringBuilder>().ToString().Should()
+            .BeEquivalentTo(" 1 2 3_4_5_6_7_8_9_10_11 12 13 ");
     }
-    
-    // [Fact]
-    // public async Task TestOrderOfBehaviorsAndPipeline()
-    // {
-    //     var services = ContainerFactory.CreateContainer(typeof(TestCommand7));
-    //     var pipeline = services.GetRequiredService<TestCommand7Pipeline_1_3>();
-    //
-    //     var testCommandValue = "Test value";
-    //     var testCommand = new TestCommand7
-    //     {
-    //         Value = testCommandValue
-    //     };
-    //
-    //     await pipeline.HandleAsync(testCommand, default);
-    //
-    //     testCommand.Value.Should().Be(testCommandValue);
-    //     services.GetRequiredService<IList<int>>().ToArray().Should()
-    //         .BeEquivalentTo(new []{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 });
-    // }
 }
