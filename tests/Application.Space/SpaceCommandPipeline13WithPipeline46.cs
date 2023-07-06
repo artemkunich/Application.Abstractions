@@ -2,27 +2,14 @@ using Akunich.Application.Abstractions;
 
 namespace Application.Space;
 
-public class SpaceCommandPipeline13WithPipeline46 : IPipeline<SpaceCommand, Unit>
-{
-    private IPipeline<SpaceCommand, Unit> _pipeline;
-    
+public class SpaceCommandPipeline13WithPipeline46 : Pipeline<SpaceCommand, Unit>
+{ 
     public SpaceCommandPipeline13WithPipeline46(
+        SpaceCommandPipeline46 pipeline,
         SpaceCommandBehavior1 behavior1,
         SpaceCommandBehavior2 behavior2,
-        SpaceCommandBehavior3 behavior3,
-        SpaceCommandPipeline46 pipeline
-    )
+        SpaceCommandBehavior3 behavior3
+    ) : base(pipeline, behavior1, behavior2, behavior3)
     {
-        var piplineBuilder = new PipelineBuilder<SpaceCommand, Unit>();
-        _pipeline = piplineBuilder
-            .AddBehavior(behavior1)
-            .AddBehavior(behavior2)
-            .AddBehavior(behavior3)
-            .SetHandler(pipeline)
-            .Build();
     }
-
-    public Task<Result<Unit>> HandleAsync(SpaceCommand command, CancellationToken cancellation) =>
-        _pipeline.HandleAsync(command, cancellation);
-    
 }

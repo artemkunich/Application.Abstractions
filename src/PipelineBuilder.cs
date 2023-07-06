@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Akunich.Application.Abstractions.Internal;
 
 namespace Akunich.Application.Abstractions;
 
@@ -58,6 +57,19 @@ public sealed class PipelineBuilder<TRequest,TResponse> : IPipelineBuilder<TRequ
                 throw new InvalidOperationException("Unexpected type of behavior");
         }
         
-        return new Pipeline<TRequest, TResponse>(next);
+        return new PipelineStub<TRequest, TResponse>(next);
+    }
+    
+    private class PipelineStub<TReq, TRes> : IPipeline<TReq, TRes>
+    {
+        private readonly Func<TReq, CancellationToken, Task<Result<TRes>>> _handle;
+    
+        public PipelineStub(Func<TReq,CancellationToken,Task<Result<TRes>>> handle)
+        {
+            _handle = handle;
+        }
+
+        public Task<Result<TRes>> HandleAsync(TReq request, CancellationToken cancellation) => 
+            _handle(request, cancellation);
     }
 }
