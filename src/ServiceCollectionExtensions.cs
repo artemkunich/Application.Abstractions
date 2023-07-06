@@ -13,14 +13,14 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddNotificationDispatcher(this IServiceCollection services) => services
         .AddScoped<INotificationDispatcher, NotificationDispatcher>();
     
-    public static IServiceCollection AddNotificationMediator<TNotification, TCommand>(this IServiceCollection services, 
+    public static IServiceCollection BindNotification<TNotification, TCommand>(this IServiceCollection services, 
         MapNotificationDelegate<TNotification, TCommand> mapNotification) 
         where TNotification : INotification
         where TCommand : IRequest<Unit> => services
         .AddScoped(_ => mapNotification)
         .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TCommand>>();
     
-    public static IServiceCollection AddNotificationMediator<TNotification, TCommand, TPipeline>(this IServiceCollection services, 
+    public static IServiceCollection BindNotification<TNotification, TCommand, TPipeline>(this IServiceCollection services, 
         MapNotificationDelegate<TNotification, TCommand> mapNotification) 
         where TNotification : INotification
         where TCommand : IRequest<Unit> 
