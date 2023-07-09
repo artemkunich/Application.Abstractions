@@ -15,17 +15,20 @@ public sealed class SpaceCommandHandler : SymbolCommandHandler<SpaceCommand>
         _notificationDispatcher = notificationDispatcher;
     }
 
-    public override Task<Result<Unit>> HandleAsync(SpaceCommand command, CancellationToken cancellation)
+    public override async Task<Result<Unit>> HandleAsync(SpaceCommand command, CancellationToken cancellation)
     {
         if (!command.RaiseNotification)
-            return base.HandleAsync(command, cancellation);
+            return await base.HandleAsync(command, cancellation);
         
         var notification = new SpaceNotification
         { 
             BehaviorsCount = command.BehaviorsCount,
             Value = command.Value
         };
-        return _notificationDispatcher.DispatchAsync(notification, cancellation);
-        
+        var result = await _notificationDispatcher.DispatchAsync(notification, cancellation);
+        if (result.IsFailure)
+            return result.Errors;
+
+        return Unit.Value;
     }
 }

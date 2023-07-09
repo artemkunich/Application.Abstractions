@@ -13,20 +13,20 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddNotificationDispatcher(this IServiceCollection services) => services
         .AddScoped<INotificationDispatcher, NotificationDispatcher>();
     
-    public static IServiceCollection BindNotification<TNotification, TCommand>(this IServiceCollection services, 
-        MapNotificationDelegate<TNotification, TCommand> mapNotification) 
+    public static IServiceCollection BindNotification<TNotification, TRequest, TResponse>(this IServiceCollection services, 
+        MapNotificationDelegate<TNotification, TRequest, TResponse> mapNotification) 
         where TNotification : INotification
-        where TCommand : IRequest<Unit> => services
+        where TRequest : IRequest<TResponse> => services
         .AddScoped(_ => mapNotification)
-        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TCommand>>();
+        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification, TRequest, TResponse>>();
     
-    public static IServiceCollection BindNotification<TNotification, TCommand, TPipeline>(this IServiceCollection services, 
-        MapNotificationDelegate<TNotification, TCommand> mapNotification) 
+    public static IServiceCollection BindNotification<TNotification, TRequest, TResponse, TPipeline>(this IServiceCollection services, 
+        MapNotificationDelegate<TNotification, TRequest, TResponse> mapNotification) 
         where TNotification : INotification
-        where TCommand : IRequest<Unit> 
-        where TPipeline : IPipeline<TCommand, Unit> => services
+        where TRequest : IRequest<TResponse> 
+        where TPipeline : IPipeline<TRequest, TResponse> => services
         .AddScoped(_ => mapNotification)
-        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TCommand,TPipeline>>();
+        .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification,TRequest,TResponse,TPipeline>>();
     
     public static IServiceCollection AddApplication(this IServiceCollection services, Assembly assembly) => services
         .AddRequestHandlers(assembly)

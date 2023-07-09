@@ -19,7 +19,7 @@ public class PipelineWithNotificationOrderTests
             .AddNotificationDispatcher()
             .AddApplication(typeof(SpaceCommand).Assembly)
             .AddApplication(typeof(UnderscoreCommand).Assembly)
-            .BindNotification<SpaceNotification, UnderscoreCommand>(n => new UnderscoreCommand(n.BehaviorsCount)
+            .BindNotification<SpaceNotification, UnderscoreCommand, Unit>(n => new UnderscoreCommand(n.BehaviorsCount)
             {
                 Value = n.Value
             });
@@ -50,7 +50,7 @@ public class PipelineWithNotificationOrderTests
             .AddNotificationDispatcher()
             .AddApplication(typeof(SpaceCommand).Assembly)
             .AddApplication(typeof(UnderscoreCommand).Assembly)
-            .BindNotification<SpaceNotification, UnderscoreCommand, UnderscoreCommandPipeline46>(n => 
+            .BindNotification<SpaceNotification, UnderscoreCommand, Unit, UnderscoreCommandPipeline46>(n => 
                 new UnderscoreCommand(n.BehaviorsCount)
                 {
                     Value = n.Value

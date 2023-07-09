@@ -1,5 +1,5 @@
 namespace Akunich.Application.Abstractions;
 
-public delegate TCommand MapNotificationDelegate<in TNotification, out TCommand>(TNotification notification) 
+public delegate TRequest MapNotificationDelegate<in TNotification, out TRequest, TResponse>(TNotification notification) 
     where TNotification : INotification 
-    where TCommand : IRequest<Unit>;
+    where TRequest : IRequest<TResponse>;

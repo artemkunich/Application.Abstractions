@@ -14,7 +14,7 @@ internal sealed class NotificationDispatcher : INotificationDispatcher
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<Result<Unit>> DispatchAsync<TNotification>(TNotification request, CancellationToken cancellation = default) where TNotification: INotification
+    public async Task<Result> DispatchAsync<TNotification>(TNotification request, CancellationToken cancellation = default) where TNotification: INotification
     {
         var eventHandlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
         foreach (var eventHandler in eventHandlers)
@@ -24,6 +24,6 @@ internal sealed class NotificationDispatcher : INotificationDispatcher
                 return result;
         }
         
-        return Unit.Value;
+        return Result.Create();
     }
 }
