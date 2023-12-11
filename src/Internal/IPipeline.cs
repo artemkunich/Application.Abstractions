@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions;
+namespace Akunich.Application.Abstractions.Internal;
 
-public interface IPipeline<in TRequest, TResponse>
+internal interface IPipeline<in TRequest, TResponse>
 {
     Task<Result<TResponse>> HandleAsync(TRequest request, CancellationToken cancellation);
 }

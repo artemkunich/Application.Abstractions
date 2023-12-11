@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions;
+namespace Akunich.Application.Abstractions.Internal;
 
-public interface INotificationHandler<in TEvent> where TEvent : INotification
+internal interface INotificationHandler<in TEvent> where TEvent : INotification
 {
     Task<Result> HandleAsync(TEvent @event, CancellationToken cancellation);
 }

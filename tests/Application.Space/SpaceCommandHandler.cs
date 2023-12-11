@@ -6,13 +6,13 @@ namespace Application.Space;
 
 public sealed class SpaceCommandHandler : SymbolCommandHandler<SpaceCommand>
 {
-    private readonly INotificationDispatcher _notificationDispatcher;
+    private readonly IMediator _mediator;
     
     public SpaceCommandHandler(
-        StringBuilder resultBuilder, 
-        INotificationDispatcher notificationDispatcher) : base(resultBuilder)
+        StringBuilder resultBuilder,
+        IMediator mediator) : base(resultBuilder)
     {
-        _notificationDispatcher = notificationDispatcher;
+        _mediator = mediator;
     }
 
     public override async Task<Result<Unit>> HandleAsync(SpaceCommand command, CancellationToken cancellation)
@@ -25,7 +25,7 @@ public sealed class SpaceCommandHandler : SymbolCommandHandler<SpaceCommand>
             BehaviorsCount = command.BehaviorsCount,
             Value = command.Value
         };
-        var result = await _notificationDispatcher.DispatchAsync(notification, cancellation);
+        var result = await _mediator.DispatchAsync(notification, cancellation);
         if (result.IsFailure)
             return result.Errors;
 
