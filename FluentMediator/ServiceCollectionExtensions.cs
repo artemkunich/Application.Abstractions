@@ -1,8 +1,8 @@
 using System;
-using Akunich.Application.Abstractions.Internal;
+using FluentMediator.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Akunich.Application.Abstractions;
+namespace FluentMediator;
 
 public static class ServiceCollectionExtensions
 {

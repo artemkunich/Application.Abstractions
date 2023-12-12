@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\FluentMediator\FluentMediator.csproj" />
       <ProjectReference Include="..\..\src\Application.Abstractions.csproj" />
       <ProjectReference Include="..\Application.Space\Application.Space.csproj" />
       <ProjectReference Include="..\Application.Underscore\Application.Underscore.csproj" />

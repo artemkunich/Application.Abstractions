@@ -1,5 +1,4 @@
-using Akunich.Application.Abstractions;
-using Akunich.Application.Abstractions.Internal;
+using Application.Abstractions;
 
 namespace Application.Underscore;
 

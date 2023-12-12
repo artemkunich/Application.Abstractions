@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Abstractions;
 
-namespace Akunich.Application.Abstractions;
+namespace FluentMediator;
 
 public interface IPipelineConfiguration<TRequest,TResponse> where TRequest : IRequest<TResponse>
 {
@@ -10,7 +8,7 @@ public interface IPipelineConfiguration<TRequest,TResponse> where TRequest : IRe
         where TBehavior : class, IPipelineBehavior<TRequest, TResponse>;
 
     IPipelineConfigurationCompleted<TRequest, TResponse> SetHandler<THandler>()
-        where THandler : class, IRequestHandler<TRequest, TResponse>;
+        where THandler : class, IHandler<TRequest, TResponse>;
 }
 
 public interface IPipelineConfigurationCompleted<TRequest, TResponse>

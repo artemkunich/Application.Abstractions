@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Application.Abstractions;
+using System;
 
-namespace Akunich.Application.Abstractions;
+namespace FluentMediator;
 
 public interface IMediatorConfiguration
 {

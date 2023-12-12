@@ -1,5 +1,5 @@
 using System.Text;
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 
 namespace Application.Symbol;
 

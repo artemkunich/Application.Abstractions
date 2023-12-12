@@ -1,4 +1,4 @@
-namespace Akunich.Application.Abstractions;
+namespace Application.Abstractions;
 
 public interface IRequest<out TResponse>
 {

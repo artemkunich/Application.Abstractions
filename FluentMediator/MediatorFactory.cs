@@ -1,10 +1,9 @@
-﻿using Akunich.Application.Abstractions.Internal;
+﻿using Application.Abstractions;
+using FluentMediator.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Akunich.Application.Abstractions;
+namespace FluentMediator;
 
 public class MediatorFactory
 {

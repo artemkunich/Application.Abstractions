@@ -1,4 +1,6 @@
-﻿namespace Akunich.Application.Abstractions.Internal;
+﻿using Application.Abstractions;
+
+namespace FluentMediator.Internal;
 
 internal class PipelineConfiguration<TRequest, TResponse> : 
     IPipelineConfiguration<TRequest,TResponse>, IPipelineConfigurationCompleted<TRequest,TResponse>
@@ -17,7 +19,7 @@ internal class PipelineConfiguration<TRequest, TResponse> :
         return this;
     }
 
-    public IPipelineConfigurationCompleted<TRequest, TResponse> SetHandler<THandler>() where THandler : class, IRequestHandler<TRequest, TResponse>
+    public IPipelineConfigurationCompleted<TRequest, TResponse> SetHandler<THandler>() where THandler : class, IHandler<TRequest, TResponse>
     {
         _behaviorStore.AddHandler<TRequest, TResponse, THandler>();
         return this;

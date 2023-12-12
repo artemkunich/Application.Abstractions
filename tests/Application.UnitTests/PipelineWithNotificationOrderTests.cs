@@ -1,10 +1,10 @@
 ﻿using System.Text;
-using Akunich.Application.Abstractions;
 using Application.Space;
 using Application.Underscore;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using FluentMediator;
 
 namespace Application.Abstractions.UnitTests;
 
@@ -42,7 +42,7 @@ public class PipelineWithNotificationOrderTests
             RaiseNotification = true
         };
 
-        await mediator.DispatchAsync<SpaceCommand,Unit>(spaceCommand, default);
+        await mediator.SendAsync<SpaceCommand,Unit>(spaceCommand, default);
 
         spaceCommand.Value.Should().Be(spaceCommandValue);
         serviceProvider.GetRequiredService<StringBuilder>().ToString().Should()
@@ -117,7 +117,7 @@ public class PipelineWithNotificationOrderTests
             RaiseNotification = true
         };
 
-        await mediator.DispatchAsync<SpaceCommand, Unit>(spaceCommand, default);
+        await mediator.SendAsync<SpaceCommand,Unit>(spaceCommand, default);
 
         if (isReverse)
         {
@@ -127,7 +127,7 @@ public class PipelineWithNotificationOrderTests
                 .BeEquivalentTo(" 1 2 3_6_5_4_7_10_9_8_11 12 13 ");
 
             stringBuilder.Clear();
-            await mediator.DispatchAsync<SpaceCommand, Unit>("reverse", spaceCommand, default);
+            await mediator.SendAsync<SpaceCommand, Unit>("reverse", spaceCommand, default);
             stringBuilder.ToString().Should()
                 .BeEquivalentTo(" 3 2 1_6_5_4_7_10_9_8_13 12 11 ");
         }
@@ -139,7 +139,7 @@ public class PipelineWithNotificationOrderTests
                 .BeEquivalentTo(" 1 2 3_4_5_6_7_8_9_10_11 12 13 ");
 
             stringBuilder.Clear();
-            await mediator.DispatchAsync<SpaceCommand, Unit>("reverse", spaceCommand, default);
+            await mediator.SendAsync<SpaceCommand, Unit>("reverse", spaceCommand, default);
             stringBuilder.ToString().Should()
                 .BeEquivalentTo(" 3 2 1_4_5_6_7_8_9_10_13 12 11 ");
         }

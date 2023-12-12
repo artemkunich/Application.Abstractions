@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions;
+namespace Application.Abstractions;
 
 public class Result
 {

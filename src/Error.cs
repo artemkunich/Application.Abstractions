@@ -1,7 +1,6 @@
 using System;
-using System.Globalization;
 
-namespace Akunich.Application.Abstractions;
+namespace Application.Abstractions;
 
 public abstract class Error : IEquatable<Error>
 {

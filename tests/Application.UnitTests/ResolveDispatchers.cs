@@ -1,4 +1,4 @@
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

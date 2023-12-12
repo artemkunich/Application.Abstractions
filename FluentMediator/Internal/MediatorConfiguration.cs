@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Application.Abstractions;
 
-namespace Akunich.Application.Abstractions.Internal;
+namespace FluentMediator.Internal;
 
 internal class MediatorConfiguration : IMediatorConfiguration
 {
@@ -50,7 +50,7 @@ internal class MediatorConfiguration : IMediatorConfiguration
     {
         _services
             .AddSingleton(mapNotification)
-            .AddScoped<INotificationHandler<TNotification>,NotificationMediator<TNotification, TRequest, TResponse>>();
+            .AddScoped<INotificationHandler<TNotification>, NotificationBinder<TNotification, TRequest, TResponse>>();
 
         return this;
     }
@@ -63,11 +63,8 @@ internal class MediatorConfiguration : IMediatorConfiguration
     {
         _services
             .AddKeyedSingleton(key, mapNotification)
-            .AddScoped<INotificationHandler<TNotification>, NotificationMediator<TNotification, TRequest, TResponse>>(
-                sp => new NotificationMediator<TNotification, TRequest, TResponse>(
-                    sp.GetRequiredKeyedService<MapNotificationDelegate<TNotification,TRequest,TResponse>>(key)
-                    ,sp.GetRequiredKeyedService<Pipeline<TRequest,TResponse>>(key)                
-                )
+            .AddScoped<INotificationHandler<TNotification>, NotificationBinder<TNotification, TRequest, TResponse>>(
+                sp => new NotificationBinder<TNotification, TRequest, TResponse>(sp, key)
              );
 
         return this;
@@ -89,6 +86,8 @@ internal class MediatorConfiguration : IMediatorConfiguration
 
     private MediatorConfiguration RegisterDefaultServices()
     {
+        _services.AddSingleton(_typesStore);
+
         var behaviors = _typesStore.GetBehaviors();
         foreach(var type in behaviors)
         {
@@ -105,14 +104,15 @@ internal class MediatorConfiguration : IMediatorConfiguration
             var pipelineType = typeof(Pipeline<,>).MakeGenericType(requestType, responseType);
             _services.AddScoped(pipelineType);
         }
-
-        _services.AddSingleton(_typesStore);
+       
         return this;
     }
 
     private MediatorConfiguration RegisterKeyedService(object key)
     {
         var typesStore = _keydTypesStoreDict[key];
+        _services.AddKeyedSingleton(key, typesStore);
+
         var behaviors = typesStore.GetBehaviors();
         foreach (var type in behaviors)
         {
@@ -133,15 +133,12 @@ internal class MediatorConfiguration : IMediatorConfiguration
             registerPipelineMethod.Invoke(this, new []{ key });          
         }
 
-        _services.AddKeyedSingleton(typesStore, key);
         return this;
     }
 
     private void RegisterKeyedPipeline<TRequest,TResponse>(object key) where TRequest : class, IRequest<TResponse>
     {
-        _services.AddKeyedScoped(key, (sp, k) => new Pipeline<TRequest, TResponse>(
-            sp.GetRequiredKeyedService<IRequestHandler<TRequest, TResponse>>(k),
-            _keydTypesStoreDict[k], sp, k));
+        _services.AddKeyedScoped(key, (sp, k) => new Pipeline<TRequest, TResponse>(sp, k));
     }
 
     //public MediatorConfiguration AddHandler<TRequest, TResponse, THandler>()

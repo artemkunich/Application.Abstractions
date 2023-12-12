@@ -1,4 +1,6 @@
-namespace Akunich.Application.Abstractions;
+using Application.Abstractions;
+
+namespace FluentMediator;
 
 public delegate TRequest MapNotificationDelegate<in TNotification, out TRequest, TResponse>(TNotification notification) 
     where TNotification : INotification 

@@ -1,4 +1,4 @@
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 
 namespace Application.Space;
 

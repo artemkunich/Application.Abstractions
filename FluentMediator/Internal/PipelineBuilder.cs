@@ -1,10 +1,11 @@
+using Application.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions.Internal;
+namespace FluentMediator.Internal;
 
 internal sealed class PipelineBuilder<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
@@ -82,7 +83,7 @@ public static class PipelineBundlerExtensions
         return builder;
     }
 
-    internal static PipelineBuilder<TRequest, TResponse> SetHandler<TRequest, TResponse>(this PipelineBuilder<TRequest, TResponse> builder, IRequestHandler<TRequest, TResponse> handler) where TRequest : IRequest<TResponse>
+    internal static PipelineBuilder<TRequest, TResponse> SetHandler<TRequest, TResponse>(this PipelineBuilder<TRequest, TResponse> builder, IHandler<TRequest, TResponse> handler) where TRequest : IRequest<TResponse>
     {
         builder.SetHandler(handler.HandleAsync);
         return builder;

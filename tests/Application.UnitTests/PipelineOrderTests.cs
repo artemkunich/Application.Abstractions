@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 using Application.Space;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;

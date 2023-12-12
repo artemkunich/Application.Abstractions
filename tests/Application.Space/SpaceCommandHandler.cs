@@ -1,5 +1,5 @@
 using System.Text;
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 using Application.Symbol;
 
 namespace Application.Space;
@@ -25,7 +25,7 @@ public sealed class SpaceCommandHandler : SymbolCommandHandler<SpaceCommand>
             BehaviorsCount = command.BehaviorsCount,
             Value = command.Value
         };
-        var result = await _mediator.DispatchAsync(notification, cancellation);
+        var result = await _mediator.PublishAsync(notification, cancellation);
         if (result.IsFailure)
             return result.Errors;
 

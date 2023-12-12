@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions;
+namespace Application.Abstractions;
 
 public delegate Task<Result<TResponse>> NextDelegate<in TRequest,TResponse>(TRequest request, CancellationToken cancellation);
 public delegate Task<Result<TResponse>> NextDelegate<TResponse>();

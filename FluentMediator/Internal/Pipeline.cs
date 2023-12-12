@@ -1,9 +1,10 @@
+using Application.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions.Internal;
+namespace FluentMediator.Internal;
 
 internal sealed class Pipeline<TRequest, TResponse> : IPipeline<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
@@ -11,11 +12,17 @@ internal sealed class Pipeline<TRequest, TResponse> : IPipeline<TRequest, TRespo
     private readonly IPipeline<TRequest, TResponse> _pipeline;
 
     public Pipeline(
-        IRequestHandler<TRequest, TResponse> handler,
-        MediatorTypesStore behaviorStore,
         IServiceProvider serviceProvider,
         object key = null)
     {
+        var handler = key is null
+            ? serviceProvider.GetRequiredService<IHandler<TRequest, TResponse>>()
+            : serviceProvider.GetRequiredKeyedService<IHandler<TRequest, TResponse>>(key);
+
+        var behaviorStore = key is null
+            ? serviceProvider.GetRequiredService<MediatorTypesStore>()
+            : serviceProvider.GetRequiredKeyedService<MediatorTypesStore>(key);
+
         var pipelineBuilder = new PipelineBuilder<TRequest, TResponse>();
         pipelineBuilder.SetHandler(handler);
 

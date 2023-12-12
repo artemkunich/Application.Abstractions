@@ -1,7 +1,8 @@
-﻿using System.Threading;
+﻿using Application.Abstractions;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Akunich.Application.Abstractions.Internal;
+namespace FluentMediator.Internal;
 
 internal interface INotificationHandler<in TEvent> where TEvent : INotification
 {

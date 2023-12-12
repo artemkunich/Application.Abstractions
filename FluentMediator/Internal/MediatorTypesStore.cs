@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Application.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Akunich.Application.Abstractions.Internal;
+namespace FluentMediator.Internal;
 
 internal class MediatorTypesStore
 {
@@ -34,11 +35,11 @@ internal class MediatorTypesStore
 
     public void AddHandler<TRequest, TResponse, THandler>()
         where TRequest : IRequest<TResponse>
-        where THandler : IRequestHandler<TRequest, TResponse>
+        where THandler : IHandler<TRequest, TResponse>
     {
-        _handlers[typeof(IRequestHandler<TRequest, TResponse>)] = typeof(THandler);
-        _handlerRequests[typeof(IRequestHandler<TRequest, TResponse>)] = typeof(TRequest);
-        _handlerResponses[typeof(IRequestHandler<TRequest, TResponse>)] = typeof(TResponse);
+        _handlers[typeof(IHandler<TRequest, TResponse>)] = typeof(THandler);
+        _handlerRequests[typeof(IHandler<TRequest, TResponse>)] = typeof(TRequest);
+        _handlerResponses[typeof(IHandler<TRequest, TResponse>)] = typeof(TResponse);
     }
 
     public IEnumerable<Type> GetBehaviors<TRequest,TResponse>() 

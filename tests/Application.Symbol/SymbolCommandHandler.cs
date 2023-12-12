@@ -1,9 +1,9 @@
 using System.Text;
-using Akunich.Application.Abstractions;
+using Application.Abstractions;
 
 namespace Application.Symbol;
 
-public abstract class SymbolCommandHandler<TCommand> : IRequestHandler<TCommand, Unit> where TCommand : SymbolCommand
+public abstract class SymbolCommandHandler<TCommand> : IHandler<TCommand, Unit> where TCommand : SymbolCommand
 {
     private StringBuilder _resultBuilder;
     
